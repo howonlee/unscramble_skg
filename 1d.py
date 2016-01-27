@@ -34,7 +34,7 @@ def frac_ordering(prev, total):
     done_already.add(prev)
     new_member = round(prev / 2.0)
     if new_member in done_already:
-        new_member = round((total + prev) / 2.0)
+        new_member = round((total + prev - 1) / 2.0)
         if new_member in done_already: #again
             return -1
     return new_member
