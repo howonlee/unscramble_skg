@@ -2,6 +2,7 @@ import numpy as np
 import math
 import operator as op
 import sys
+import copy
 import numpy.random as npr
 import matplotlib.pyplot as plt
 from heapdict import heapdict
@@ -26,47 +27,62 @@ def fractal_attractor():
     plt.plot(sorted(data))
     plt.show()
 
-done_already = set()
-
-def frac_ordering(prev, total):
-    if prev == -1:
-        return -1
-    done_already.add(prev)
-    new_member = round(prev / 2.0)
-    if new_member in done_already:
-        new_member = round((total + prev) / 2.0)
-        if new_member in done_already: #again
-            return -1
-    return new_member
-
-def unshuffle(to_unshuffle):
+def get_unshuffle_mapping(to_unshuffle, order):
     hd = heapdict()
     for x in xrange(to_unshuffle.size):
         hd[x] = -to_unshuffle[x]
     items_ordered = []
     while hd.keys():
         items_ordered.append(hd.popitem())
-    return items_ordered
+    new_ordering = frac_ordering(order)
+    unshuffle_mapping = []
+    for idx, member in enumerate(new_ordering):
+        unshuffle_mapping.append((items_ordered[idx][0], member))
+    return unshuffle_mapping, items_ordered
 
-def test_frac_ordering(num):
-    currs = []
-    curr = 0
-    for x in xrange(num):
-        currs.append(curr)
-        curr = frac_ordering(curr, num)
-    return currs
+def apply_unshuffle_mapping(unshuffle_mapping, scrambled_data):
+    unscrambled_data = np.zeros_like(scrambled_data)
+    for member in unshuffle_mapping:
+        scrambled, unscrambled = member
+        unscrambled_data[unscrambled] = scrambled_data[scrambled]
+    return unscrambled_data
+
+def frac_ordering(order):
+    layers = [[0]]
+    while order > 0:
+        old_layers = copy.deepcopy(layers)
+        order -= 1
+        # this would be less of a mess with one-indexing
+        curr = (layers[-1][-1] + 1) * 2 - 1
+        layers.append([])
+        prev_old = 0
+        next_old = old_layers[0][0]
+        for idx, old_layer in enumerate(old_layers):
+            for member in old_layer:
+                next_old = member
+                old_diff = next_old - prev_old
+                curr -= old_diff
+                layers[-(idx + 1)].append(curr)
+                prev_old = member
+    total_ordering = []
+    for layer in layers:
+        total_ordering += sorted(layer)
+    return total_ordering
+
+def test_frac_ordering():
+    assert frac_ordering(0) == [0]
+    assert frac_ordering(1) == [0, 1]
+    assert frac_ordering(2) == [0, 1, 2, 3]
+    assert frac_ordering(3) == [0, 1, 2, 4, 3, 5, 6, 7]
+    # this is where the addition problem comes in
+    assert frac_ordering(4) == [0, 1, 2, 4, 8, 3, 5, 6, 9, 10, 12, 7, 11, 13, 14, 15]
+    print "good!"
 
 if __name__ == "__main__":
-    # 0, 1:7, 7:22
-    print test_frac_ordering(16)
-    data = kron_line(5)
-    # print list(reversed(np.argsort(data)))
-    print unshuffle(data)
-    # plt.plot(map(op.itemgetter(0), unshuffle(data)))
+    data = kron_line(10)
+    plt.plot(data)
+    npr.shuffle(data)
+    mapping, _ = get_unshuffle_mapping(data, 10)
+    unscrambled_data = apply_unshuffle_mapping(mapping, data)
+    plt.plot(unscrambled_data)
     plt.show()
-    # print test_frac_ordering()[:22]
-    # npr.shuffle(data)
-    # # unshuffled_data = unshuffle(data)
-    # # plt.plot(data)
-    # # plt.plot(unshuffled_data)
-    # # plt.show()
