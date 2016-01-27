@@ -35,16 +35,20 @@ def sample_net(arr):
                 new_arr[x,y] = 1
     return new_arr
 
+def shuffle_mat(net, kron_order):
+    r_perm_mat = rand_permutation(2 ** kron_order)
+    c_perm_mat = rand_permutation(2 ** kron_order)
+    new_net = np.dot(net, r_perm_mat)
+    new_net = np.dot(c_perm_mat, new_net)
+    return new_net
+
 def by_axis_unscrambling():
     """
     Can't work this way.
     """
     kron_order = 10
     net = kron_net(kron_order)
-    r_perm_mat = rand_permutation(2 ** kron_order)
-    c_perm_mat = rand_permutation(2 ** kron_order)
-    net = np.dot(net, r_perm_mat)
-    net = np.dot(c_perm_mat, net)
+    net = shuffle_mat(net, kron_order)
     r_summed_net = net.sum(axis=0)
     r_matching, _ = get_unshuffle_mapping(r_summed_net, kron_order)
     r_unpermute_mat = np.zeros_like(net)
@@ -62,7 +66,10 @@ def by_axis_unscrambling():
     plt.show()
 
 if __name__ == "__main__":
-    kron_order = 3
+    kron_order = 2
     net = kron_net(kron_order)
-    plt.plot(net.ravel())
-    plt.show()
+    net = shuffle_mat(net, kron_order)
+    ravelled_net = net.ravel()
+    mapping, _ = get_unshuffle_mapping(ravelled_net, kron_order * 2)
+    print ravelled_net
+    print mapping
