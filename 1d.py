@@ -23,11 +23,19 @@ def fractal_attractor():
     plt.plot(sorted(data))
     plt.show()
 
+def frac_ordering(length):
+############
+############
+############
+############
+    pass
+
 def unshuffle(to_unshuffle):
     hd = heapdict()
     for x in xrange(to_unshuffle.size):
-        hd[x] = to_unshuffle[x]
-    print hd.values()
+        hd[x] = -to_unshuffle[x]
+    while hd.keys():
+        print hd.popitem()
 
 if __name__ == "__main__":
     data = kron_line(8)
