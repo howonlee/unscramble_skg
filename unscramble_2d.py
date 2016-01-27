@@ -42,5 +42,10 @@ if __name__ == "__main__":
     net = np.dot(net, r_perm_mat)
     summed_net = net.sum(axis=0)
     matching, _ = get_unshuffle_mapping(summed_net, kron_order)
-    plt.plot(apply_unshuffle_matching(matching, summed_net))
+    unpermute_mat = np.zeros_like(net)
+    for member in matching:
+        snd, fst = member
+        unpermute_mat[member] = 1
+    net = np.dot(net, unpermute_mat)
+    plt.imshow(net)
     plt.show()
