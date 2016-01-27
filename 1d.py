@@ -78,11 +78,15 @@ def test_frac_ordering():
     assert frac_ordering(4) == [0, 1, 2, 4, 8, 3, 5, 6, 9, 10, 12, 7, 11, 13, 14, 15]
     print "good!"
 
-if __name__ == "__main__":
+def test_frac_unshuffling():
     data = kron_line(10)
     plt.plot(data)
     npr.shuffle(data)
+    plt.plot(data)
     mapping, _ = get_unshuffle_mapping(data, 10)
     unscrambled_data = apply_unshuffle_mapping(mapping, data)
     plt.plot(unscrambled_data)
     plt.show()
+
+if __name__ == "__main__":
+    pass
