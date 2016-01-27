@@ -35,9 +35,9 @@ def sample_net(arr):
 if __name__ == "__main__":
     kron_order = 10
     net = kron_net(kron_order)
-    l_perm_mat = rand_permutation(2 ** kron_order)
-    r_perm_mat = rand_permutation(2 ** kron_order)
-    net = np.dot(net, r_perm_mat)
-    net = np.dot(l_perm_mat, net)
-    plt.imshow(net, cmap="Greys")
+    # l_perm_mat = rand_permutation(2 ** kron_order)
+    # r_perm_mat = rand_permutation(2 ** kron_order)
+    # net = np.dot(net, r_perm_mat)
+    # net = np.dot(l_perm_mat, net)
+    # plt.imshow(net, cmap="Greys")
     plt.show()

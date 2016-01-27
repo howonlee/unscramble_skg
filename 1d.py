@@ -58,10 +58,10 @@ def test_frac_ordering(num):
 
 if __name__ == "__main__":
     # 0, 1:7, 7:22
-    print test_frac_ordering(64)
-    data = kron_line(6)
+    print test_frac_ordering(16)
+    data = kron_line(5)
     # print list(reversed(np.argsort(data)))
-    print map(op.itemgetter(0), unshuffle(data))
+    print unshuffle(data)
     # plt.plot(map(op.itemgetter(0), unshuffle(data)))
     plt.show()
     # print test_frac_ordering()[:22]
