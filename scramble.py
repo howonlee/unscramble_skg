@@ -39,5 +39,5 @@ if __name__ == "__main__":
     r_perm_mat = rand_permutation(2 ** kron_order)
     net = np.dot(net, r_perm_mat)
     net = np.dot(l_perm_mat, net)
-    plt.imshow(net)
+    plt.imshow(net, cmap="Greys")
     plt.show()
