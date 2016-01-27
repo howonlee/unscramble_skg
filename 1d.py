@@ -34,7 +34,7 @@ def frac_ordering(prev, total):
     done_already.add(prev)
     new_member = int(math.ceil(prev / 2.0))
     if new_member in done_already:
-        new_member = int(math.ceil((prev + total) / 2.0))
+        new_member = int(math.ceil((new_member * 2 + total) / 2.0))
         if new_member in done_already: #again
             return -1
     return new_member
@@ -42,28 +42,29 @@ def frac_ordering(prev, total):
 def unshuffle(to_unshuffle):
     hd = heapdict()
     for x in xrange(to_unshuffle.size):
-        # hd[x] = -to_unshuffle[x] - (x / 25600.00)
         hd[x] = -to_unshuffle[x]
     items_ordered = []
     while hd.keys():
         items_ordered.append(hd.popitem())
     return items_ordered
 
-def test_frac_ordering():
+def test_frac_ordering(num):
     currs = []
     curr = 0
-    for x in xrange(64):
+    for x in xrange(num):
         currs.append(curr)
-        curr = frac_ordering(curr, 64)
+        curr = frac_ordering(curr, num)
     return currs
 
 if __name__ == "__main__":
     # 0, 1:7, 7:22
-    print sorted(test_frac_ordering()[7:22])
-    data = kron_line(6)
+    # plt.plot(test_frac_ordering(1024))
+    data = kron_line(10)
+    plt.plot(map(op.itemgetter(0), unshuffle(data)))
+    plt.show()
+    # print test_frac_ordering()[:22]
     # npr.shuffle(data)
-    print sorted(unshuffle(data)[7:22], key=op.itemgetter(0))
-    # unshuffled_data = unshuffle(data)
-    # plt.plot(data)
-    # plt.plot(unshuffled_data)
-    # plt.show()
+    # # unshuffled_data = unshuffle(data)
+    # # plt.plot(data)
+    # # plt.plot(unshuffled_data)
+    # # plt.show()
