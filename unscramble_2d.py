@@ -35,17 +35,36 @@ def sample_net(arr):
                 new_arr[x,y] = 1
     return new_arr
 
+def by_axis_unscrambling():
+    """
+    Can't work this way.
+    """
+    kron_order = 10
+    net = kron_net(kron_order)
+    r_perm_mat = rand_permutation(2 ** kron_order)
+    c_perm_mat = rand_permutation(2 ** kron_order)
+    net = np.dot(net, r_perm_mat)
+    net = np.dot(c_perm_mat, net)
+    r_summed_net = net.sum(axis=0)
+    r_matching, _ = get_unshuffle_mapping(r_summed_net, kron_order)
+    r_unpermute_mat = np.zeros_like(net)
+    for member in r_matching:
+        r_unpermute_mat[member] = 1
+    net = np.dot(net, r_unpermute_mat)
+    c_summed_net = net.sum(axis=1)
+    c_matching, _ = get_unshuffle_mapping(c_summed_net, kron_order)
+    c_unpermute_mat = np.zeros_like(net)
+    for member in c_matching:
+        fst, snd = member
+        c_unpermute_mat[snd, fst] = 1
+    net = np.dot(c_unpermute_mat, net)
+    plt.imshow(net)
+    plt.show()
+
 if __name__ == "__main__":
     kron_order = 10
-    net = sample_net(kron_net(kron_order))
+    net = kron_net(kron_order)
     r_perm_mat = rand_permutation(2 ** kron_order)
+    c_perm_mat = rand_permutation(2 ** kron_order)
     net = np.dot(net, r_perm_mat)
-    summed_net = net.sum(axis=0)
-    matching, _ = get_unshuffle_mapping(summed_net, kron_order)
-    unpermute_mat = np.zeros_like(net)
-    for member in matching:
-        print member
-        unpermute_mat[member] = 1
-    net = np.dot(net, unpermute_mat)
-    plt.imshow(net, cmap="Greys")
-    plt.show()
+    net = np.dot(c_perm_mat, net)
