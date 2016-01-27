@@ -58,6 +58,7 @@ def test_frac_ordering():
     return currs
 
 if __name__ == "__main__":
+    # 0, 1:7, 7:22
     print sorted(test_frac_ordering()[7:22])
     data = kron_line(6)
     # npr.shuffle(data)
