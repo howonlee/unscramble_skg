@@ -18,7 +18,7 @@ def total_shuffle(arr):
 
 def kron_net(order):
     # generator taken from the SKG paper
-    generator = np.array([[0.999, 0.7], [0.7, 0.55]])
+    generator = np.array([[1, 0.5], [0.5, 0.5]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
@@ -62,9 +62,7 @@ def by_axis_unscrambling():
     plt.show()
 
 if __name__ == "__main__":
-    kron_order = 10
+    kron_order = 3
     net = kron_net(kron_order)
-    r_perm_mat = rand_permutation(2 ** kron_order)
-    c_perm_mat = rand_permutation(2 ** kron_order)
-    net = np.dot(net, r_perm_mat)
-    net = np.dot(c_perm_mat, net)
+    plt.plot(net.ravel())
+    plt.show()

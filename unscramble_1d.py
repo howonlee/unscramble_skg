@@ -114,4 +114,5 @@ def test_noise():
     plt.show()
 
 if __name__ == "__main__":
-    test_mlp_delta()
+    plt.plot(kron_line(6))
+    plt.show()
