@@ -1,9 +1,6 @@
 import numpy as np
 import numpy.random as npr
 import matplotlib.pyplot as plt
-from unscramble_1d import get_unshuffle_mapping,\
-        apply_unshuffle_mapping,\
-        frac_ordering
 
 def rand_permutation(size):
     arr = np.identity(size)
@@ -18,7 +15,7 @@ def total_shuffle(arr):
 
 def kron_net(order):
     # generator taken from the SKG paper
-    generator = np.array([[1, 0.5], [0.5, 0.5]])
+    generator = np.array([[1, 0.6], [0.3, 0.1]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
@@ -65,11 +62,17 @@ def by_axis_unscrambling():
     plt.imshow(net)
     plt.show()
 
+def get_unshuffle_mapping(stuff):
+    pass
+
+def apply_unshuffle_mapping(stuff):
+    pass
+
+def frac_ordering(stuff):
+    pass
+
+def test_frac_ordering():
+    pass
+
 if __name__ == "__main__":
-    kron_order = 2
-    net = kron_net(kron_order)
-    net = shuffle_mat(net, kron_order)
-    ravelled_net = net.ravel()
-    mapping, _ = get_unshuffle_mapping(ravelled_net, kron_order * 2)
-    print ravelled_net
-    print mapping
+    test_frac_ordering()
