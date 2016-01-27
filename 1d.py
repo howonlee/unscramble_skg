@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import operator as op
+from scipy.stats import norm
 import sys
 import copy
 import numpy.random as npr
@@ -66,7 +67,7 @@ def frac_ordering(order):
                 prev_old = member
     total_ordering = []
     for layer in layers:
-        total_ordering += sorted(layer)
+        total_ordering += sorted(layer) # should I add to that sort?
     return total_ordering
 
 def test_frac_ordering():
@@ -82,11 +83,35 @@ def test_frac_unshuffling():
     data = kron_line(10)
     plt.plot(data)
     npr.shuffle(data)
-    plt.plot(data)
     mapping, _ = get_unshuffle_mapping(data, 10)
     unscrambled_data = apply_unshuffle_mapping(mapping, data)
     plt.plot(unscrambled_data)
     plt.show()
 
+def test_mlp_delta():
+    mlp_delta = np.load("delta.npy")
+    mlp_delta = np.abs(mlp_delta)
+    mlp_delta /= np.max(mlp_delta)
+    mlp_delta = mlp_delta[:2048]
+    mapping, _ = get_unshuffle_mapping(mlp_delta, 11)
+    unscrambled_delta = apply_unshuffle_mapping(mapping, mlp_delta)
+    plt.plot(unscrambled_delta)
+    plt.show()
+
+def get_noise(n=2048):
+    noise = []
+    for k in xrange(n):
+        noise.append(norm.rvs(scale=1))
+    return np.array(noise)
+
+def test_noise():
+    noise = get_noise()
+    noise = np.abs(noise)
+    noise /= np.max(noise)
+    mapping, _ = get_unshuffle_mapping(noise, 11)
+    unscrambled_noise = apply_unshuffle_mapping(mapping, noise)
+    plt.plot(unscrambled_noise)
+    plt.show()
+
 if __name__ == "__main__":
-    pass
+    test_mlp_delta()
