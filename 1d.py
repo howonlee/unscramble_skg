@@ -34,7 +34,7 @@ def frac_ordering(prev, total):
     done_already.add(prev)
     new_member = round(prev / 2.0)
     if new_member in done_already:
-        new_member = round((total + prev - 1) / 2.0)
+        new_member = round((total + prev) / 2.0)
         if new_member in done_already: #again
             return -1
     return new_member
@@ -58,9 +58,10 @@ def test_frac_ordering(num):
 
 if __name__ == "__main__":
     # 0, 1:7, 7:22
-    print sorted(test_frac_ordering(64)[7:22])
+    print test_frac_ordering(64)
     data = kron_line(6)
-    print sorted(unshuffle(data)[7:22], key=op.itemgetter(0))
+    # print list(reversed(np.argsort(data)))
+    print map(op.itemgetter(0), unshuffle(data))
     # plt.plot(map(op.itemgetter(0), unshuffle(data)))
     plt.show()
     # print test_frac_ordering()[:22]
