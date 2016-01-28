@@ -69,8 +69,33 @@ def get_unshuffle_mapping(stuff):
 def apply_unshuffle_mapping(stuff):
     pass
 
+def num_layers(order):
+    # this is the order-eth tetrahedral number
+    return (order * (order + 1) * (order + 2)) // 6
+
 def frac_ordering(order):
     layers = [[0]]
+    curr_order = 0
+    while curr_order < order:
+        curr_order += 1
+        old_layers, new_layers = copy.deepcopy(layers), [[] for x in xrange(num_layers(curr_order+1))]
+#############################
+#############################
+#############################
+#############################
+        addend_1 = old_layers[-1][-1] + 1
+        addend_2 = old_layers[-1][-1] + 2
+        addend_3 = old_layers[-1][-1] + 3
+        for idx, layer in enumerate(old_layers):
+            new_layers[idx] += layer
+            new_layers[idx+1] += [member + addend_1 for member in layer]
+            new_layers[idx+2] += [member + addend_2 for member in layer]
+            new_layers[idx+3] += [member + addend_3 for member in layer]
+#############################
+#############################
+#############################
+        layers = new_layers
+    total_ordering = []
     for layer in layers:
         total_ordering += sorted(layer) # should I add to that sort?
     return total_ordering
@@ -81,6 +106,4 @@ def test_frac_ordering():
     assert frac_ordering(1) == [0, 1, 2, 3]
 
 if __name__ == "__main__":
-    kron_order = 8
-    net = kron_net(kron_order)
-    print len(set(list(net.ravel())))
+    test_frac_ordering()
