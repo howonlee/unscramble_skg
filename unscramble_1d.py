@@ -51,32 +51,25 @@ def apply_unshuffle_mapping(unshuffle_mapping, scrambled_data):
 def frac_ordering(order):
     layers = [[0]]
     while order > 0:
-        old_layers = copy.deepcopy(layers)
+        old_layers, new_layers = copy.deepcopy(layers), [[] for x in xrange(len(layers)+1)]
         order -= 1
-        # this would be less of a mess with one-indexing
-        curr = (layers[-1][-1] + 1) * 2 - 1
-        layers.append([])
-        prev_old = 0
-        next_old = old_layers[0][0]
-        for idx, old_layer in enumerate(old_layers):
-            for member in old_layer:
-                next_old = member
-                old_diff = next_old - prev_old
-                curr -= old_diff
-                layers[-(idx + 1)].append(curr)
-                prev_old = member
+        addend = old_layers[-1][-1] + 1
+        for idx, layer in enumerate(old_layers):
+            new_layers[idx] += layer
+            new_layers[idx+1] += [member + addend for member in layer]
+        layers = new_layers
     total_ordering = []
     for layer in layers:
         total_ordering += sorted(layer) # should I add to that sort?
     return total_ordering
 
-def test_frac_ordering():
-    assert frac_ordering(0) == [0]
-    assert frac_ordering(1) == [0, 1]
-    assert frac_ordering(2) == [0, 1, 2, 3]
-    assert frac_ordering(3) == [0, 1, 2, 4, 3, 5, 6, 7]
+def test_frac_ordering(order_fn=frac_ordering):
+    assert order_fn(0) == [0]
+    assert order_fn(1) == [0, 1]
+    assert order_fn(2) == [0, 1, 2, 3]
+    assert order_fn(3) == [0, 1, 2, 4, 3, 5, 6, 7]
     # this is where the addition problem comes in
-    assert frac_ordering(4) == [0, 1, 2, 4, 8, 3, 5, 6, 9, 10, 12, 7, 11, 13, 14, 15]
+    assert order_fn(4) == [0, 1, 2, 4, 8, 3, 5, 6, 9, 10, 12, 7, 11, 13, 14, 15]
     print "good!"
 
 def test_frac_unshuffling():
@@ -114,4 +107,4 @@ def test_noise():
     plt.show()
 
 if __name__ == "__main__":
-    test_frac_ordering()
+    test_frac_ordering(frac_ordering)
