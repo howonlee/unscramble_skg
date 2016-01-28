@@ -78,21 +78,15 @@ def idx_delta(order):
     return (order * (order + 1)) // 2
 
 def frac_ordering(order):
-    layers = [[0]]
-    curr_order = 0
-    while curr_order < order:
-        curr_order += 1
-        old_layers, new_layers = copy.deepcopy(layers), [[] for x in xrange(num_layers(curr_order+1))]
-        layers = new_layers
-    print layers
-    total_ordering = []
-    for layer in layers:
-        total_ordering += sorted(layer) # should I add to that sort?
-    return total_ordering
+    generator = np.array([[7, 5], [3, 2]])
+    arr = generator.copy()
+    for x in xrange(order-1):
+        arr = np.kron(arr, generator)
+    return np.argsort(-arr, axis=None)
 
 def test_frac_ordering():
     # print frac_ordering(1)
-    frac_ordering(3)
+    print frac_ordering(3)
 
 if __name__ == "__main__":
     test_frac_ordering()
