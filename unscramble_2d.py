@@ -69,14 +69,6 @@ def get_unshuffle_mapping(stuff):
 def apply_unshuffle_mapping(stuff):
     pass
 
-def num_layers(order):
-    # this is the order-eth tetrahedral number
-    return (order * (order + 1) * (order + 2)) // 6
-
-def idx_delta(order):
-    # you will recognize as order-eth triangular number
-    return (order * (order + 1)) // 2
-
 def frac_ordering(order):
     generator = np.array([[7, 5], [3, 2]])
     arr = generator.copy()
@@ -85,8 +77,10 @@ def frac_ordering(order):
     return np.argsort(-arr, axis=None)
 
 def test_frac_ordering():
-    # print frac_ordering(1)
-    print frac_ordering(3)
+    assert list(frac_ordering(1)) == [0, 1, 2, 3]
+    assert list(frac_ordering(2)) == [0, 1, 2, 3, 4, 8, 6, 9, 5, 10, 7, 11, 12, 13, 14, 15]
+    assert list(frac_ordering(3)) == [0, 1, 2, 4, 3, 5, 6, 16, 32, 8, 7, 10, 34, 12, 33, 17, 20, 9, 36, 18, 35, 14, 21, 22, 38, 37, 13, 11, 19, 40, 24, 48, 15, 39, 23, 42, 49, 28, 26, 41, 44, 50, 25, 52, 53, 30, 29, 43, 51, 46, 27, 45, 54, 56, 55, 31, 47, 57, 58, 60, 62, 59, 61, 63]
+    print "happy times!"
 
 if __name__ == "__main__":
     test_frac_ordering()
