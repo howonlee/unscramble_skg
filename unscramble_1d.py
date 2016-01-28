@@ -63,6 +63,14 @@ def frac_ordering(order):
         total_ordering += sorted(layer) # should I add to that sort?
     return total_ordering
 
+def recursive_frac_ordering(order):
+    return recursive_frac_ordering_helper(order, [0])
+
+def recursive_frac_ordering_helper(curr_order, curr_ordering):
+    if curr_order == 0:
+        return curr_ordering
+    new_ordering = copy.deepcopy(curr_ordering)
+
 def test_frac_ordering(order_fn=frac_ordering):
     assert order_fn(0) == [0]
     assert order_fn(1) == [0, 1]
