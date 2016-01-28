@@ -1,4 +1,5 @@
 import itertools
+import collections
 
 def prod_count(product_list):
     seen = set()
@@ -10,8 +11,13 @@ def prod_count(product_list):
             ct += 1
     return ct
 
+def prod_vec(product_list):
+    canonicalized_list = ["".join(sorted(member)) for member in product_list]
+    seen = collections.Counter(canonicalized_list)
+    return seen.most_common()
+
 if __name__ == "__main__":
-    initiator = "ABC"
-    for x in xrange(15):
+    initiator = "ABCD"
+    for x in xrange(5):
         prod_list = list(itertools.product(initiator, repeat=x))
-        print prod_count(prod_list)
+        print prod_vec(prod_list)
