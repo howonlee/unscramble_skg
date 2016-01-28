@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.random as npr
+import copy
 import matplotlib.pyplot as plt
 
 def rand_permutation(size):
@@ -15,7 +16,7 @@ def total_shuffle(arr):
 
 def kron_net(order):
     # generator taken from the SKG paper
-    generator = np.array([[1, 0.6], [0.3, 0.1]])
+    generator = np.array([[1, 0.8], [0.3, 0.1]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
@@ -68,11 +69,18 @@ def get_unshuffle_mapping(stuff):
 def apply_unshuffle_mapping(stuff):
     pass
 
-def frac_ordering(stuff):
-    pass
+def frac_ordering(order):
+    layers = [[0]]
+    for layer in layers:
+        total_ordering += sorted(layer) # should I add to that sort?
+    return total_ordering
 
 def test_frac_ordering():
-    pass
+    assert frac_ordering(0) == [0]
+    print frac_ordering(1)
+    assert frac_ordering(1) == [0, 1, 2, 3]
 
 if __name__ == "__main__":
-    test_frac_ordering()
+    kron_order = 8
+    net = kron_net(kron_order)
+    print len(set(list(net.ravel())))

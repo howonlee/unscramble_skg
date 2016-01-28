@@ -114,5 +114,4 @@ def test_noise():
     plt.show()
 
 if __name__ == "__main__":
-    plt.plot(kron_line(6))
-    plt.show()
+    test_frac_ordering()
