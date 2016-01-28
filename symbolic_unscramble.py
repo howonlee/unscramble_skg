@@ -1,5 +1,6 @@
 import itertools
 import collections
+import numpy as np
 import operator as op
 
 def prod_count(product_list):
@@ -26,7 +27,9 @@ def prod_vec(product_list):
 
 if __name__ == "__main__":
     initiator = "7532"
-    for x in xrange(5):
-        prod_list = list(itertools.product(initiator, repeat=x))
-        sorted_vec = sorted(prod_vec(prod_list), key=op.itemgetter(0), reverse=True)
-        print [ls[1] for ls in sorted_vec]
+    prod_list = list(itertools.product(initiator, repeat=2))
+    mult_list = map(mult, prod_list)
+    print np.argsort(-np.array(mult_list)).reshape(4,4)
+    # for x in xrange(5):
+    # sorted_vec = sorted(prod_vec(prod_list), key=op.itemgetter(0), reverse=True)
+    # print [ls[1] for ls in sorted_vec]

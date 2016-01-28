@@ -83,18 +83,8 @@ def frac_ordering(order):
     while curr_order < order:
         curr_order += 1
         old_layers, new_layers = copy.deepcopy(layers), [[] for x in xrange(num_layers(curr_order+1))]
-        addend_1 = old_layers[idx][-1] + 1
-        addend_2 = (old_layers[idx][-1] + 1) * 2
-        addend_3 = (old_layers[idx][-1] + 1) * 3
-        for idx, layer in enumerate(old_layers):
-            new_layers[idx] += layer
-            new_layers[idx + curr_order] += [member for member in layer]
-            new_layers[idx + curr_order*2] += [member for member in layer]
-            print idx
-            print idx + idx_delta(curr_order+1)
-            new_layers[idx + idx_delta(curr_order+1)] += [member for member in layer]
         layers = new_layers
-    print [len(ls) for ls in layers]
+    print layers
     total_ordering = []
     for layer in layers:
         total_ordering += sorted(layer) # should I add to that sort?
