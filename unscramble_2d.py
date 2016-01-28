@@ -88,8 +88,8 @@ def frac_ordering(order):
         addend_3 = (old_layers[-1][-1] + 1) * 3
         for idx, layer in enumerate(old_layers):
             new_layers[idx] += layer
-            new_layers[idx + 1] += [member + addend_1 for member in layer]
-            new_layers[idx + (curr_order+1)] += [member + addend_2 for member in layer]
+            new_layers[idx + curr_order] += [member + addend_1 for member in layer]
+            new_layers[idx + curr_order*2] += [member + addend_2 for member in layer]
             new_layers[idx + idx_delta(curr_order+1)] += [member + addend_3 for member in layer]
             print new_layers
         layers = new_layers
@@ -101,6 +101,7 @@ def frac_ordering(order):
 def test_frac_ordering():
     print frac_ordering(1)
     print frac_ordering(2)
+    print frac_ordering(3)
 
 if __name__ == "__main__":
     test_frac_ordering()
