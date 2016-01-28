@@ -83,25 +83,26 @@ def frac_ordering(order):
     while curr_order < order:
         curr_order += 1
         old_layers, new_layers = copy.deepcopy(layers), [[] for x in xrange(num_layers(curr_order+1))]
-        addend_1 = old_layers[-1][-1] + 1
-        addend_2 = (old_layers[-1][-1] + 1) * 2
-        addend_3 = (old_layers[-1][-1] + 1) * 3
+        addend_1 = old_layers[idx][-1] + 1
+        addend_2 = (old_layers[idx][-1] + 1) * 2
+        addend_3 = (old_layers[idx][-1] + 1) * 3
         for idx, layer in enumerate(old_layers):
             new_layers[idx] += layer
-            new_layers[idx + curr_order] += [member + addend_1 for member in layer]
-            new_layers[idx + curr_order*2] += [member + addend_2 for member in layer]
-            new_layers[idx + idx_delta(curr_order+1)] += [member + addend_3 for member in layer]
-            print new_layers
+            new_layers[idx + curr_order] += [member for member in layer]
+            new_layers[idx + curr_order*2] += [member for member in layer]
+            print idx
+            print idx + idx_delta(curr_order+1)
+            new_layers[idx + idx_delta(curr_order+1)] += [member for member in layer]
         layers = new_layers
+    print [len(ls) for ls in layers]
     total_ordering = []
     for layer in layers:
         total_ordering += sorted(layer) # should I add to that sort?
     return total_ordering
 
 def test_frac_ordering():
-    print frac_ordering(1)
-    print frac_ordering(2)
-    print frac_ordering(3)
+    # print frac_ordering(1)
+    frac_ordering(3)
 
 if __name__ == "__main__":
     test_frac_ordering()
