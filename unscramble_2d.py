@@ -83,14 +83,19 @@ def frac_ordering(order):
     return np.argsort(arr, axis=None)
 
 def noise_sample(order):
-    print order
     noise = npr.pareto(1, size=(2**order, 2**order))
     return noise
 
+def gauss_sample(order):
+    noise = npr.normal(size=(2**order, 2**order))
+    return noise
+
 if __name__ == "__main__":
-    kron_order = 10
-    noise = noise_sample(kron_order)
+    kron_order = 5
+    noise = np.abs(gauss_sample(kron_order))
+    print np.sum(noise)
     unshuffle_mapping = get_unshuffle_mapping(noise, kron_order)
     unshuffled = apply_unshuffle_mapping(unshuffle_mapping, noise)
-    plt.imshow(np.log(unshuffled.reshape(2**kron_order, 2**kron_order)), interpolation='none')
+    plt.imshow(unshuffled.reshape(2**kron_order, 2**kron_order), interpolation='none')
+    plt.colorbar()
     plt.show()
