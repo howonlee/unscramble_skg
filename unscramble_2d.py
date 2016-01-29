@@ -75,11 +75,11 @@ def apply_unshuffle_mapping(mapping, data):
     return unscrambled_data
 
 def frac_ordering(order):
-    generator = np.array([[1, 0.5], [0.5, 0.1]])
+    generator = np.array([[1, 0.5], [0.5, 0.0]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
-    return np.argsort(arr, axis=None)
+    return np.argsort(-arr, axis=None)
 
 def test_frac_ordering():
     assert list(frac_ordering(1)) == [0, 1, 2, 3]
@@ -88,12 +88,14 @@ def test_frac_ordering():
     print "happy times!"
 
 if __name__ == "__main__":
-    kron_order = 11
-    net = kron_net(kron_order)
-    shuffled_net = shuffle_mat(net, kron_order)
-    unshuffle_mapping = get_unshuffle_mapping(shuffled_net, kron_order)
-    unshuffled = apply_unshuffle_mapping(unshuffle_mapping, shuffled_net)
-    plt.imshow(net)
-    plt.imshow(shuffled_net)
-    plt.imshow(unshuffled.reshape(2**kron_order, 2**kron_order), interpolation='none')
-    plt.show()
+    print frac_ordering(2)
+    test_frac_ordering()
+    # kron_order = 11
+    # net = kron_net(kron_order)
+    # shuffled_net = shuffle_mat(net, kron_order)
+    # unshuffle_mapping = get_unshuffle_mapping(shuffled_net, kron_order)
+    # unshuffled = apply_unshuffle_mapping(unshuffle_mapping, shuffled_net)
+    # plt.imshow(net)
+    # plt.imshow(shuffled_net)
+    # plt.imshow(unshuffled.reshape(2**kron_order, 2**kron_order), interpolation='none')
+    # plt.show()
