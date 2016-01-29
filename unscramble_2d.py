@@ -80,7 +80,7 @@ def frac_ordering(order):
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
-    return np.argsort(arr, axis=None)
+    return np.argsort(-arr, axis=None)
 
 def noise_sample(order):
     noise = npr.pareto(1, size=(2**order, 2**order))
@@ -90,7 +90,7 @@ def gauss_sample(order):
     noise = npr.normal(size=(2**order, 2**order))
     return noise
 
-if __name__ == "__main__":
+def test_with_noise():
     kron_order = 8
     total_unshuffled = np.zeros((2**kron_order, 2**kron_order))
     for x in xrange(300):
@@ -104,3 +104,6 @@ if __name__ == "__main__":
     plt.imshow(np.log(total_unshuffled + 1), interpolation='none')
     plt.colorbar()
     plt.show()
+
+if __name__ == "__main__":
+    print frac_ordering(5)
