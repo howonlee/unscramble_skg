@@ -91,11 +91,16 @@ def gauss_sample(order):
     return noise
 
 if __name__ == "__main__":
-    kron_order = 5
-    noise = np.abs(gauss_sample(kron_order))
-    print np.sum(noise)
-    unshuffle_mapping = get_unshuffle_mapping(noise, kron_order)
-    unshuffled = apply_unshuffle_mapping(unshuffle_mapping, noise)
-    plt.imshow(unshuffled.reshape(2**kron_order, 2**kron_order), interpolation='none')
+    kron_order = 8
+    total_unshuffled = np.zeros((2**kron_order, 2**kron_order))
+    for x in xrange(300):
+        print x
+        noise = np.abs(noise_sample(kron_order))
+        noise /= np.max(noise)
+        print np.sum(noise)
+        unshuffle_mapping = get_unshuffle_mapping(noise, kron_order)
+        unshuffled = apply_unshuffle_mapping(unshuffle_mapping, noise).reshape(2**kron_order, 2**kron_order)
+        total_unshuffled += sample_net(unshuffled)
+    plt.imshow(np.log(total_unshuffled + 1), interpolation='none')
     plt.colorbar()
     plt.show()
