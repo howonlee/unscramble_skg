@@ -15,7 +15,7 @@ def total_shuffle(arr):
     return new_arr
 
 def kron_net(order):
-    generator = np.array([[0.999, 0.75], [0.70, 0.4]])
+    generator = np.array([[0.999, 0.75], [0.70, 0.5]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
@@ -75,7 +75,7 @@ def apply_unshuffle_mapping(mapping, data):
     return unscrambled_data
 
 def frac_ordering(order):
-    generator = np.array([[7, 5], [3, 2]])
+    generator = np.array([[1, 0.5], [0.5, 0.1]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
@@ -90,10 +90,10 @@ def test_frac_ordering():
 if __name__ == "__main__":
     kron_order = 11
     net = kron_net(kron_order)
-    # shuffled_net = shuffle_mat(net, kron_order)
-    # unshuffle_mapping = get_unshuffle_mapping(shuffled_net, kron_order)
-    # unshuffled = apply_unshuffle_mapping(unshuffle_mapping, shuffled_net)
+    shuffled_net = shuffle_mat(net, kron_order)
+    unshuffle_mapping = get_unshuffle_mapping(shuffled_net, kron_order)
+    unshuffled = apply_unshuffle_mapping(unshuffle_mapping, shuffled_net)
     plt.imshow(net)
-    # plt.imshow(shuffled_net)
-    # plt.imshow(unshuffled.reshape(2**kron_order, 2**kron_order), interpolation='none')
+    plt.imshow(shuffled_net)
+    plt.imshow(unshuffled.reshape(2**kron_order, 2**kron_order), interpolation='none')
     plt.show()
