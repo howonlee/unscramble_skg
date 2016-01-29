@@ -15,8 +15,7 @@ def total_shuffle(arr):
     return new_arr
 
 def kron_net(order):
-    # generator taken from the SKG paper
-    generator = np.array([[1, 0.8], [0.3, 0.1]])
+    generator = np.array([[0.999, 0.75], [0.75, 0.4]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
@@ -63,18 +62,24 @@ def by_axis_unscrambling():
     plt.imshow(net)
     plt.show()
 
-def get_unshuffle_mapping(stuff):
-    pass
+def get_unshuffle_mapping(mat, order):
+    argsort_list = list(np.argsort(mat.ravel()))
+    return zip(argsort_list, frac_ordering(order))
 
-def apply_unshuffle_mapping(stuff):
-    pass
+def apply_unshuffle_mapping(mapping, data):
+    data_view = data.ravel()
+    unscrambled_data = np.zeros_like(data_view)
+    for member in unshuffle_mapping:
+        scrambled, unscrambled = member
+        unscrambled_data[unscrambled] = data_view[scrambled]
+    return unscrambled_data
 
 def frac_ordering(order):
     generator = np.array([[7, 5], [3, 2]])
     arr = generator.copy()
     for x in xrange(order-1):
         arr = np.kron(arr, generator)
-    return np.argsort(-arr, axis=None)
+    return np.argsort(arr, axis=None)
 
 def test_frac_ordering():
     assert list(frac_ordering(1)) == [0, 1, 2, 3]
@@ -83,4 +88,12 @@ def test_frac_ordering():
     print "happy times!"
 
 if __name__ == "__main__":
-    test_frac_ordering()
+    kron_order = 10
+    net = kron_net(kron_order)
+    shuffled_net = shuffle_mat(net, kron_order)
+    unshuffle_mapping = get_unshuffle_mapping(shuffled_net, kron_order)
+    unshuffled = apply_unshuffle_mapping(unshuffle_mapping, shuffled_net)
+    # plt.imshow(net)
+    # plt.imshow(shuffled_net)
+    plt.imshow(unshuffled.reshape(2**kron_order, 2**kron_order))
+    plt.show()
